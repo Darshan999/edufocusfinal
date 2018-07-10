@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Creative - Bootstrap 3 Responsive Admin Template">
+    <meta name="author" content="GeeksLabs">
+    <meta name="keyword" content="Creative, Dashboard, Admin, Template, Theme, Bootstrap, Responsive, Retina, Minimal">
+    <link rel="shortcut icon" href="img/favicon.png">
+
+    <title>Insert Event </title>
+
+    <!-- Bootstrap CSS -->    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- bootstrap theme -->
+    <link href="css/bootstrap-theme.css" rel="stylesheet">
+    <!--external css-->
+    <!-- font icon -->
+    <link href="css/elegant-icons-style.css" rel="stylesheet" />
+    <link href="css/font-awesome.min.css" rel="stylesheet" />    
+    <!-- full calendar css-->
+    <link href="assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet" />
+	<link href="assets/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" />
+    <!-- easy pie chart-->
+    <link href="assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="css/owl.carousel.css" type="text/css">
+	<link href="css/jquery-jvectormap-1.2.2.css" rel="stylesheet">
+    <!-- Custom styles -->
+	<link rel="stylesheet" href="css/fullcalendar.css">
+	<link href="css/widgets.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-responsive.css" rel="stylesheet" />
+	<link href="css/xcharts.min.css" rel=" stylesheet">	
+	<link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/EduFocus.css">
+
+
+  <link href="pagination/demo/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="pagination/demo/css/jquery.dataTables_themeroller.css" rel="stylesheet">
+
+ 
+     <script type="text/javascript">
+    function del()
+    {
+      return confirm("Are you sure you wanna delete this post?");
+    }
+    </script>
+
+   
+    <!-- =======================================================
+        Theme Name: NiceAdmin
+        Theme URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+        Author: BootstrapMade
+        Author URL: https://bootstrapmade.com
+    ======================================================= -->
+  </head>
+
+  <body class="backcolor">
+  <!-- container section start -->
+  <section id="container" class="">
+     
+      
+      
+      <!--header end -->
+      <?php
+
+        include'./header.php';
+      ?>
+
+       <?php
+
+    $u_email_id=$_SESSION["u_email_id"];
+  //  include 'database.php';
+    $obj2=new database();
+    $res2=$obj2->userdetail($u_email_id);
+    while($row=mysql_fetch_assoc($res2))
+    {
+      $u_type=$row["u_type"];
+    }
+
+   // echo $u_email_id;
+
+    if(!empty($_SESSION["u_email_id"]))
+    {
+      if($u_type!='admin')
+      {
+      // echo "<script type='text/javascript'>alert('You can`t access ');</script>";
+       header('location:../mainpage.php');
+      }
+    }
+    else
+    {
+      
+     // echo "<script type='text/javascript'>alert('You can`t access ');</script>";
+       header('location:../index4.php');
+     
+    }
+
+    ?>
+
+      <!--sidebar start-->
+      <?php
+        include'./sidebar.php';
+      ?>
+      <section id="main-content"> 
+          <section class="wrapper">
+
+  <div class="container-fluid">
+    <div class="row">
+
+    <center><h1 class="text">Add Event</h1></center>
+    <div class="panel-body">
+   
+    </div>
+  
+   <?php
+           
+           
+           
+            if(isset($_POST["eventadd"]))
+            {
+
+              if(!empty($_SESSION["u_email_id"]))
+              {
+
+                $u_email_id=$_SESSION["u_email_id"];
+              //$fk_u_email_id='dd@gmail.com';
+              $event_title=$_POST["event_title"];    
+              $event_address=$_POST["event_address"];    
+              $event_date=$_POST["event_date"];    
+              $event_time=$_POST["event_time"];    
+              //$blog_time=date("h:i:sa");
+              //$fk_sub_id=$_POST["fk_sub_id"];         
+              //$flag='inactive';
+              $event_desc=$_POST["event_desc"];    
+              //$view='1';
+
+              if($_FILES["photo"]["name"]=="")
+                {
+
+                          $target_file="";
+                 }
+               else if($_FILES["photo"]["name"]!="")
+                 {
+                   $target_dir = "../img/event/";
+                    $target_file = $target_dir . basename($_FILES["photo"]["name"]);
+                    move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file);
+                   $target_file="img/event/". basename($_FILES["photo"]["name"]);
+
+                  }
+
+           
+         //   require 'database.php';
+            $obj1=new database();
+            $res1=$obj1->insertevent($event_title,$event_desc,$target_file,$event_address,$event_date,$u_email_id,$event_time);
+
+
+             echo '<script langauge="javascript">;
+                                    alert("Added sucessfully");
+                                    window.location.href="event.php";
+                                    </script>';
+                 
+
+    
+              }
+            }
+        ?>
+       
+
+      
+              <div class="row">
+                  <div class="col-lg-12">
+                      <section class="panel">
+                          <header class="panel-heading">
+                             
+                          </header>
+                          <div class="panel-body">
+                              
+                                  <form class="form-horizontal " method="post" action="" enctype="multipart/form-data">
+                                     
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Title <span class="required">*</span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control " name="event_title" type="text" placeholder="Event Title" required="" />
+                                            </div>
+                                      </div>
+
+                                       <div class="form-group ">
+                                          <label class="control-label col-lg-2">Description <span class="required">*</span></label>
+                                          <div class="col-lg-10">
+                                              <textarea class="form-control ckeditor" name="event_desc" rows="6" placeholder=" Description" ></textarea>
+                                              <div class="help-block with-errors"></div>
+                          
+                                            </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Address <span class="required">*</span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control " name="event_address" type="text" placeholder="Event Address" required="" />
+                                            </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                        <label class="control-label col-lg-2">Upload Image <span class="required">*</span></label>
+                                          <div class="col-lg-10">
+                                          <input class="form-control browse_img" type="file" name="photo" required="">
+
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Date <span class="required">*</span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control " name="event_date" type="text" placeholder="YYYY/MM/DD Format" />
+                                            </div>
+                                      </div>
+
+
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Time <span class="required">*</span></label>
+                                          <div class="col-lg-10">
+                                              <input class="form-control " name="event_time" type="text" placeholder="H:M:S" required="" />
+                                            </div>
+                                      </div>
+
+
+
+                                      
+                                       <div class="form-group">
+                                        
+                                              <center><button class="btn btn-primary text-center" type="submit" name="eventadd">Add Event</button>
+                                              
+                                      </div>
+
+                                  </form>
+                            
+                          </div>
+                      </section>
+                  </div>
+              </div>
+ 
+
+        
+      
+
+    </div>
+  </div>
+
+              </section>
+              </section>
+
+</section>
+</body>
+  <!-- container section start -->
+
+
+     <!-- ck editor -->
+    <script type="text/javascript" src="assets/ckeditor/ckeditor.js"></script>
+    <!-- javascripts -->
+    <script src="js/jquery.js"></script>
+  <script src="js/jquery-ui-1.10.4.min.js"></script>
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
+    <!-- bootstrap -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- nice scroll -->
+    <script src="js/jquery.scrollTo.min.js"></script>
+    <script src="js/jquery.nicescroll.js" type="text/javascript"></script>
+    <!-- charts scripts -->
+    <script src="assets/jquery-knob/js/jquery.knob.js"></script>
+    <script src="js/jquery.sparkline.js" type="text/javascript"></script>
+    <script src="assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+    <script src="js/owl.carousel.js" ></script>
+    <!-- jQuery full calendar -->
+    <script src="js/fullcalendar.min.js"></script> <!-- Full Google Calendar - Calendar -->
+  <script src="assets/fullcalendar/fullcalendar/fullcalendar.js"></script>
+    <!--script for this page only-->
+    <script src="js/calendar-custom.js"></script>
+  <script src="js/jquery.rateit.min.js"></script>
+    <!-- custom select -->
+    <script src="js/jquery.customSelect.min.js" ></script>
+  <script src="assets/chart-master/Chart.js"></script>
+   
+    <!--custome script for all page-->
+    <script src="js/scripts.js"></script>
+    <!-- custom script for this page-->
+    <script src="js/sparkline-chart.js"></script>
+    <script src="js/easy-pie-chart.js"></script>
+  <script src="js/jquery-jvectormap-1.2.2.min.js"></script>
+  <script src="js/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="js/xcharts.min.js"></script>
+  <script src="js/jquery.autosize.min.js"></script>
+  <script src="js/jquery.placeholder.min.js"></script>
+  <script src="js/gdp-data.js"></script>  
+  <script src="js/morris.min.js"></script>
+  <script src="js/sparklines.js"></script>  
+  <script src="js/charts.js"></script>
+  <script src="js/jquery.slimscroll.min.js"></script>
+ 
+  <script src="pagination/demo/Scripts/bootstrap.min.js"></script>
+  <script src='pagination/demo/js/jquery.dataTables.min.js'></script>
+  <script>
+
+      //knob
+      $(function() {
+        $(".knob").knob({
+          'draw' : function () { 
+            $(this.i).val(this.cv + '%')
+          }
+        })
+      });
+
+      //carousel
+      $(document).ready(function() {
+          $("#owl-slider").owlCarousel({
+              navigation : true,
+              slideSpeed : 300,
+              paginationSpeed : 400,
+              singleItem : true
+
+          });
+      });
+
+      //custom select box
+
+      $(function(){
+          $('select.styled').customSelect();
+      });
+    
+    /* ---------- Map ---------- */
+  $(function(){
+    $('#map').vectorMap({
+      map: 'world_mill_en',
+      series: {
+        regions: [{
+          values: gdpData,
+          scale: ['#000', '#000'],
+          normalizeFunction: 'polynomial'
+        }]
+      },
+    backgroundColor: '#eef3f7',
+      onLabelShow: function(e, el, code){
+        el.html(el.html()+' (GDP - '+gdpData[code]+')');
+      }
+    });
+  });
+
+  
+       $(function () {
+
+            $('#dataTable').dataTable({
+               // "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+        //"pageLength": 1
+            });
+
+            $('#chk-all').click(function () {
+                if ($(this).is(':checked')) {
+                    $('#responsiveTable').find('.chk-row').each(function () {
+                        $(this).prop('checked', true);
+                        $(this).parent().parent().parent().addClass('selected');
+                    });
+                }
+                else {
+                    $('#responsiveTable').find('.chk-row').each(function () {
+                        $(this).prop('checked', false);
+                        $(this).parent().parent().parent().removeClass('selected');
+                    });
+                }
+            });
+        });
+
+      
+      
+
+  </script>
+
+  </body>
+</html>
